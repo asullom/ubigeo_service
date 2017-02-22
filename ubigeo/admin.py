@@ -13,7 +13,7 @@ class UbigeoAdmin(admin.ModelAdmin):
     list_display = ("nombre", "codigo", "estado",
                     "pais", "tipo_ubigeo", "padre")
     search_fields = ("nombre", "codigo",)
-    list_per_page = 200
+    list_per_page = 7000
 
 
 admin.site.register(Ubigeo, UbigeoAdmin)
