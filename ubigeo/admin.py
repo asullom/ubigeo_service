@@ -10,9 +10,10 @@ class UbigeoAdmin(admin.ModelAdmin):
 
     """docstring for UbigeoAdmin"""
 
-    list_display = ("nombre", "codigo", "estado")
+    list_display = ("nombre", "codigo", "estado",
+                    "pais", "tipo_ubigeo", "padre")
     search_fields = ("nombre", "codigo",)
-    list_per_page = 70000
+    list_per_page = 200
 
 
 admin.site.register(Ubigeo, UbigeoAdmin)
