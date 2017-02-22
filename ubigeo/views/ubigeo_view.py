@@ -45,7 +45,13 @@ class UbigeoSerializer(serializers.ModelSerializer):
 
 
 class UbigeoViewSet(ModelPagination, viewsets.ModelViewSet):
-    queryset = Ubigeo.objects.all()
+    queryset = Ubigeo.objects.filter(id__isnull=False)
     serializer_class = UbigeoSerializer
     #permission_classes = [IsAuthenticated, ModelPermission, TokenHasScope]
     # required_scopes = ['catalogo', ]  # , 'write'
+
+    '''
+    def get_queryset(self):
+        ModelPagination.queryset = Ubigeo.objects.all()
+        return ModelPagination.queryset
+    '''
