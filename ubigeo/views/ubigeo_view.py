@@ -11,7 +11,7 @@ from ..models import Ubigeo
 
 #from backend_utils.logs import log_params
 #from backend_utils.permissions import ModelPermission
-#from backend_utils.pagination import ModelPagination
+from backend_utils.pagination import ModelPagination
 
 #from rest_framework import permissions
 # from django.utils.translation import ugettext as _  # , ungettext
@@ -19,22 +19,33 @@ from ..models import Ubigeo
 log = logging.getLogger(__name__)
 
 
+class DynamicSerializerModel(serializers.ModelSerializer):
+
+    def __init__(self, *args, **kwargs):
+        fields = kwargs.pop('fields', None)
+
+        super(DynamicSerializerModel, self).__init__(*args, **kwargs)
+
+        if fields is not None:
+            allowed = set(fields)
+            existing = set(self.fields.keys())
+            for field_name in existing - allowed:
+                self.fields.pop(field_name)
+
+
 class UbigeoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Ubigeo
-        fields = '__all__'
+        fields = ("id", "nombre", "codigo", "estado",
+                  "pais", "tipo_ubigeo", "padre")  # '__all__'  # ('nombre',)
 
 #from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
 #from rest_framework.permissions import IsAuthenticated
 
 
-class UbigeoViewSet(viewsets.ModelViewSet):
+class UbigeoViewSet(ModelPagination, viewsets.ModelViewSet):
     queryset = Ubigeo.objects.all()
     serializer_class = UbigeoSerializer
     #permission_classes = [IsAuthenticated, ModelPermission, TokenHasScope]
     # required_scopes = ['catalogo', ]  # , 'write'
-
-    def get_queryset(self):
-        queryset = Ubigeo.objects.all()
-        return queryset

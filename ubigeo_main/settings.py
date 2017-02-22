@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
 
     'oauth2_backend',
+    'backend_utils',
 
     'ubigeo',
 ]
