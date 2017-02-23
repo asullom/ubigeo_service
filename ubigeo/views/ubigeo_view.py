@@ -9,8 +9,8 @@ from functools import reduce
 
 from ..models import Ubigeo
 
-#from backend_utils.logs import log_params
-#from backend_utils.permissions import ModelPermission
+from backend_utils.logs import log_params
+from backend_utils.permissions import ModelPermission
 from backend_utils.pagination import ModelPagination
 
 #from rest_framework import permissions
@@ -40,18 +40,14 @@ class UbigeoSerializer(serializers.ModelSerializer):
         fields = ("id", "nombre", "codigo", "estado",
                   "pais", "tipo_ubigeo", "padre")  # '__all__'  # ('nombre',)
 
-#from oauth2_provider.ext.rest_framework import TokenHasReadWriteScope, TokenHasScope
+from oauth2_provider.ext.rest_framework import TokenHasScope
 #from rest_framework.permissions import IsAuthenticated
+
+from rest_framework.permissions import IsAuthenticated
 
 
 class UbigeoViewSet(ModelPagination, viewsets.ModelViewSet):
     queryset = Ubigeo.objects.filter(id__isnull=False)
     serializer_class = UbigeoSerializer
-    #permission_classes = [IsAuthenticated, ModelPermission, TokenHasScope]
-    # required_scopes = ['catalogo', ]  # , 'write'
-
-    '''
-    def get_queryset(self):
-        ModelPagination.queryset = Ubigeo.objects.all()
-        return ModelPagination.queryset
-    '''
+    permission_classes = [ModelPermission, TokenHasScope]
+    required_scopes = ['ubigeo', ]  # , 'write' , TokenHasScope
